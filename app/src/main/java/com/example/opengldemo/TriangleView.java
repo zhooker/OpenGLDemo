@@ -1,9 +1,10 @@
 package com.example.opengldemo;
 
 import android.content.Context;
-import android.opengl.EGLConfig;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+
+import com.example.opengldemo.ndk.TriangleLib;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -21,11 +22,12 @@ public class TriangleView extends GLSurfaceView  {
         super(context, attrs);
     }
 
-    void init() {
+    public void init() {
         setEGLConfigChooser(8,8,8,0,16,0);
         setEGLContextClientVersion(3);
         setRenderer(new TriangleRender());
     }
+
     class TriangleRender implements  GLSurfaceView.Renderer{
 
         @Override

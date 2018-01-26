@@ -102,12 +102,12 @@ GLuint createProgram(const char* vtxSrc, const char* fragSrc) {
 }
 GLuint program;
 extern "C"{
-JNIEXPORT jboolean JNICALL Java_com_example_opengldemo_TriangleLib_init(JNIEnv* env, jobject obj);
-JNIEXPORT void JNICALL Java_com_example_opengldemo_TriangleLib_resize(JNIEnv* env, jobject obj, jint width, jint height);
-JNIEXPORT void JNICALL Java_com_example_opengldemo_TriangleLib_step(JNIEnv* env, jobject obj);
+JNIEXPORT jboolean JNICALL Java_com_example_opengldemo_ndk_TriangleLib_init(JNIEnv* env, jobject obj);
+JNIEXPORT void JNICALL Java_com_example_opengldemo_ndk_TriangleLib_resize(JNIEnv* env, jobject obj, jint width, jint height);
+JNIEXPORT void JNICALL Java_com_example_opengldemo_ndk_TriangleLib_step(JNIEnv* env, jobject obj);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_example_opengldemo_TriangleLib_init(JNIEnv* env, jobject obj){
+JNIEXPORT jboolean JNICALL Java_com_example_opengldemo_ndk_TriangleLib_init(JNIEnv* env, jobject obj){
     program = createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
     if (!program){
         ALOGE("程序创建失败");
@@ -116,11 +116,11 @@ JNIEXPORT jboolean JNICALL Java_com_example_opengldemo_TriangleLib_init(JNIEnv* 
     glClearColor(0,0,0,0);
     return JNI_TRUE;
 }
-JNIEXPORT void JNICALL Java_com_example_opengldemo_TriangleLib_resize(JNIEnv* env, jobject obj, jint width, jint height){
+JNIEXPORT void JNICALL Java_com_example_opengldemo_ndk_TriangleLib_resize(JNIEnv* env, jobject obj, jint width, jint height){
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 }
-JNIEXPORT void JNICALL Java_com_example_opengldemo_TriangleLib_step(JNIEnv* env, jobject obj){
+JNIEXPORT void JNICALL Java_com_example_opengldemo_ndk_TriangleLib_step(JNIEnv* env, jobject obj){
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(program);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,VERTEX);

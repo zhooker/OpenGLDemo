@@ -1,4 +1,4 @@
-package com.example.opengldemo;
+package com.example.opengldemo.ndk;
 
 /**
  * Created by zhooker on 2018/1/25.
