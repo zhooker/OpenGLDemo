@@ -1,31 +1,16 @@
-package com.example.opengldemo;
+package com.example.opengldemo.ndk;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.AttributeSet;
 
-import com.example.opengldemo.ndk.TriangleLib;
+import com.example.opengldemo.util.BaseRendererActivity;
 
 import javax.microedition.khronos.opengles.GL10;
 
-/**
- * Created by zhooker on 2018/1/25.
- */
+public class NativeEGLActivity extends BaseRendererActivity {
 
-public class TriangleView extends GLSurfaceView  {
-
-    public TriangleView(Context context) {
-        super(context);
-    }
-
-    public TriangleView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public void init() {
-        setEGLConfigChooser(8,8,8,0,16,0);
-        setEGLContextClientVersion(3);
-        setRenderer(new TriangleRender());
+    @Override
+    protected GLSurfaceView.Renderer getRenderer() {
+        return new TriangleRender();
     }
 
     class TriangleRender implements  GLSurfaceView.Renderer{

@@ -8,7 +8,12 @@ import android.util.Log;
 
 public class L {
     public static final String TAG = "zhuangsj";
+
     public static void d(String fun , String info) {
         Log.d(TAG, fun  + "  : "  + info);
+    }
+
+    public static void d(String info) {
+        Log.d(TAG, info);
     }
 }

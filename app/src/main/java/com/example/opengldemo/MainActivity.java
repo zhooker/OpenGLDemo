@@ -1,22 +1,26 @@
 package com.example.opengldemo;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import com.example.opengldemo.ndk.NativeOpenGLActivity;
+
+import com.example.opengldemo.light.SpotLightActivity;
+import com.example.opengldemo.ndk.NativeEGLActivity;
 import com.example.opengldemo.util.BaseActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final Class<? extends BaseActivity>[] ACTIVITIES = new Class[]{
-            NativeOpenGLActivity.class
+            NativeEGLActivity.class,
+            SpotLightActivity.class
     };
 
     private static final String[] ACTIVITIE_DESC = new String[]{
-            "NDK Demo\n使用NDK的方式使用 OpenGL"
+            "NDK Demo\n使用NDK的方式使用 OpenGL",
+            "Base Light Demo\n基础光照"
     };
 
     @Override
