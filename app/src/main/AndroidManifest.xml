@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".ndk.NativeEGLActivity" />
         <activity android:name=".light.SpotLightActivity" />
+        <activity android:name=".light.SpotLightActivity2" />
     </application>
 
 </manifest>
