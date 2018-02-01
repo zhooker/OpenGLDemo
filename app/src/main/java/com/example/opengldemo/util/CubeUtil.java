@@ -5,6 +5,51 @@ package com.example.opengldemo.util;
  */
 
 public class CubeUtil {
+    public static final float[] cubeTextureData =
+            {
+                    0,      0,
+                    0,      1.0f,
+                    1.0f,   0,
+                    0,      1.0f,
+                    1.0f,   1.0f,
+                    1.0f,   0,
+
+                    0,      0,
+                    0,      1.0f,
+                    1.0f,   0,
+                    0,      1.0f,
+                    1.0f,   1.0f,
+                    1.0f,   0,
+
+                    0,      0,
+                    0,      1.0f,
+                    1.0f,   0,
+                    0,      1.0f,
+                    1.0f,   1.0f,
+                    1.0f,   0,
+
+                    0,      0,
+                    0,      1.0f,
+                    1.0f,   0,
+                    0,      1.0f,
+                    1.0f,   1.0f,
+                    1.0f,   0,
+
+                    0,      0,
+                    0,      1.0f,
+                    1.0f,   0,
+                    0,      1.0f,
+                    1.0f,   1.0f,
+                    1.0f,   0,
+
+                    0,      0,
+                    0,      1.0f,
+                    1.0f,   0,
+                    0,      1.0f,
+                    1.0f,   1.0f,
+                    1.0f,   0,
+            };
+
     // X, Y, Z
     public static final float[] cubePositionData =
             {

@@ -24,7 +24,7 @@ import com.example.opengldemo.util.ProgramUtil;
 public class SpotLightRenderer implements GLSurfaceView.Renderer
 {
 	/** Used for debug logs. */
-	private static final String TAG = "SpotLightRenderer";
+	private static final String TAG = "TextureRenderer";
 	
 	/**
 	 * Store the model matrix. This matrix is used to move models from object space (where each model can be thought
@@ -95,10 +95,10 @@ public class SpotLightRenderer implements GLSurfaceView.Renderer
 	private final float[] mLightPosInEyeSpace = new float[4];
 	
 	/** This is a handle to our per-vertex cube shading program. */
-	private int mPerVertexProgramHandle;
+	protected int mPerVertexProgramHandle;
 		
 	/** This is a handle to our light point program. */
-	private int mPointProgramHandle;	
+    protected int mPointProgramHandle;
 						
 	/**
 	 * Initialize the model data.
@@ -264,14 +264,9 @@ public class SpotLightRenderer implements GLSurfaceView.Renderer
         
         // Set our per-vertex lighting program.
         GLES30.glUseProgram(mPerVertexProgramHandle);
-        
+
         // Set program handles for cube drawing.
-        mMVPMatrixHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_MVPMatrix");
-        mMVMatrixHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_MVMatrix"); 
-        mLightPosHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_LightPos");
-        mPositionHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Position");
-        mColorHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Color");
-        mNormalHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Normal"); 
+        initHandles();
         
         // Calculate position of the light. Rotate and then push into the distance.
         Matrix.setIdentityM(mLightModelMatrix, 0);
@@ -310,12 +305,22 @@ public class SpotLightRenderer implements GLSurfaceView.Renderer
         // Draw a point to indicate the light.
         GLES30.glUseProgram(mPointProgramHandle);
         drawLight();
-	}				
+	}
+
+	protected void initHandles() {
+        // Set program handles for cube drawing.
+        mMVPMatrixHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_MVPMatrix");
+        mMVMatrixHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_MVMatrix");
+        mLightPosHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_LightPos");
+        mPositionHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Position");
+        mColorHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Color");
+        mNormalHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Normal");
+    }
 	
 	/**
 	 * Draws a cube.
-	 */			
-	private void drawCube()
+	 */
+    protected void drawCube()
 	{		
 		// Pass in the position information
 		mCubePositions.position(0);		
@@ -362,7 +367,7 @@ public class SpotLightRenderer implements GLSurfaceView.Renderer
 	/**
 	 * Draws a point representing the position of the light.
 	 */
-	private void drawLight()
+	protected void drawLight()
 	{
 		final int pointMVPMatrixHandle = GLES30.glGetUniformLocation(mPointProgramHandle, "u_MVPMatrix");
         final int pointPositionHandle = GLES30.glGetAttribLocation(mPointProgramHandle, "a_Position");
