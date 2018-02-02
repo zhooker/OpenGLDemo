@@ -30,69 +30,69 @@ public class SpotLightRenderer implements GLSurfaceView.Renderer
 	 * Store the model matrix. This matrix is used to move models from object space (where each model can be thought
 	 * of being located at the center of the universe) to world space.
 	 */
-	private float[] mModelMatrix = new float[16];
+	protected float[] mModelMatrix = new float[16];
 
 	/**
 	 * Store the view matrix. This can be thought of as our camera. This matrix transforms world space to eye space;
 	 * it positions things relative to our eye.
 	 */
-	private float[] mViewMatrix = new float[16];
+	protected float[] mViewMatrix = new float[16];
 
 	/** Store the projection matrix. This is used to project the scene onto a 2D viewport. */
-	private float[] mProjectionMatrix = new float[16];
+	protected float[] mProjectionMatrix = new float[16];
 	
 	/** Allocate storage for the final combined matrix. This will be passed into the shader program. */
-	private float[] mMVPMatrix = new float[16];
+	protected float[] mMVPMatrix = new float[16];
 	
 	/** 
 	 * Stores a copy of the model matrix specifically for the light position.
 	 */
-	private float[] mLightModelMatrix = new float[16];	
+	protected float[] mLightModelMatrix = new float[16];
 	
 	/** Store our model data in a float buffer. */
-	private final FloatBuffer mCubePositions;
-	private final FloatBuffer mCubeColors;
-	private final FloatBuffer mCubeNormals;
+	protected final FloatBuffer mCubePositions;
+	protected final FloatBuffer mCubeColors;
+	protected final FloatBuffer mCubeNormals;
 	
 	/** This will be used to pass in the transformation matrix. */
-	private int mMVPMatrixHandle;
+	protected int mMVPMatrixHandle;
 	
 	/** This will be used to pass in the modelview matrix. */
-	private int mMVMatrixHandle;
+	protected int mMVMatrixHandle;
 	
 	/** This will be used to pass in the light position. */
-	private int mLightPosHandle;
+	protected int mLightPosHandle;
 	
 	/** This will be used to pass in model position information. */
-	private int mPositionHandle;
+	protected int mPositionHandle;
 	
 	/** This will be used to pass in model color information. */
-	private int mColorHandle;
+	protected int mColorHandle;
 	
 	/** This will be used to pass in model normal information. */
-	private int mNormalHandle;
+	protected int mNormalHandle;
 
 	/** How many bytes per float. */
-	private final int mBytesPerFloat = 4;	
+	protected final int mBytesPerFloat = 4;
 	
 	/** Size of the position data in elements. */
-	private final int mPositionDataSize = 3;	
+	protected final int mPositionDataSize = 3;
 	
 	/** Size of the color data in elements. */
-	private final int mColorDataSize = 4;	
+	protected final int mColorDataSize = 4;
 	
 	/** Size of the normal data in elements. */
-	private final int mNormalDataSize = 3;
+	protected final int mNormalDataSize = 3;
 	
 	/** Used to hold a light centered on the origin in model space. We need a 4th coordinate so we can get translations to work when
 	 *  we multiply this by our transformation matrices. */
-	private final float[] mLightPosInModelSpace = new float[] {0.0f, 0.0f, 0.0f, 1.0f};
+	protected final float[] mLightPosInModelSpace = new float[] {0.0f, 0.0f, 0.0f, 1.0f};
 	
 	/** Used to hold the current position of the light in world space (after transformation via model matrix). */
-	private final float[] mLightPosInWorldSpace = new float[4];
+	protected final float[] mLightPosInWorldSpace = new float[4];
 	
 	/** Used to hold the transformed position of the light in eye space (after transformation via modelview matrix) */
-	private final float[] mLightPosInEyeSpace = new float[4];
+	protected final float[] mLightPosInEyeSpace = new float[4];
 	
 	/** This is a handle to our per-vertex cube shading program. */
 	protected int mPerVertexProgramHandle;
