@@ -12,11 +12,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
 import static android.opengl.GLES20.GL_LINEAR;
 import static android.opengl.GLES20.GL_LINEAR_MIPMAP_LINEAR;
+import static android.opengl.GLES20.GL_MIRRORED_REPEAT;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
 import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glGenTextures;
@@ -63,6 +67,10 @@ public class TextureHelper {
         // black.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
         // Load the bitmap into the bound texture.
         texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
 

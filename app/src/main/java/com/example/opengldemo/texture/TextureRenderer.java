@@ -28,9 +28,9 @@ public class TextureRenderer extends SpotLightRenderer {
     public TextureRenderer(Context context) {
         super();
         // init textureId
-        mCubesTexture = ByteBuffer.allocateDirect(CubeUtil.cubeTextureData.length * 4)
+        mCubesTexture = ByteBuffer.allocateDirect(cubeTextureData.length * 4)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mCubesTexture.put(CubeUtil.cubeTextureData).position(0);
+        mCubesTexture.put(cubeTextureData).position(0);
 
         this.mContext = context;
     }
@@ -64,7 +64,7 @@ public class TextureRenderer extends SpotLightRenderer {
                         // gl_Position is a special variable used to store the final position.
                         // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.
                         + "   gl_Position = u_MVPMatrix * a_Position;                 \n"
-                                  + "   v_TextureCoordinates = a_TextureCoordinates;                            \n"
+                                  + "   v_TextureCoordinates = a_TextureCoordinates;  \n"
                         + "}                                                          \n";
 
         return perPixelVertexShader;
@@ -95,7 +95,7 @@ public class TextureRenderer extends SpotLightRenderer {
                         // Add attenuation.
                         + "   diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance * distance)));  \n"
                         // Multiply the color by the diffuse illumination level to get final output color.
-                        + "   FragColor = mix(texture(u_TextureUnit, v_TextureCoordinates),v_Color * diffuse,0.8); \n"
+                        + "   FragColor = mix(texture(u_TextureUnit, v_TextureCoordinates), v_Color * diffuse, 0.8); \n"
                         + "}                                                                     \n";
 
         return perPixelFragmentShader;
@@ -131,4 +131,53 @@ public class TextureRenderer extends SpotLightRenderer {
 
         super.drawCube();
     }
+
+    private static final float MIN_S = -0.5f;
+    private static final float MIN_T = -0.5f;
+    private static final float MAX_S = 1.5f;
+    private static final float MAX_T = 1.5f;
+    private static final float[] cubeTextureData =
+            {
+                    MIN_S,      MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MAX_T,
+                    MAX_S,   MIN_T,
+
+                    MIN_S,      MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MAX_T,
+                    MAX_S,   MIN_T,
+
+                    MIN_S,      MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MAX_T,
+                    MAX_S,   MIN_T,
+
+                    MIN_S,      MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MAX_T,
+                    MAX_S,   MIN_T,
+
+                    MIN_S,      MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MAX_T,
+                    MAX_S,   MIN_T,
+
+                    MIN_S,      MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MIN_T,
+                    MIN_S,      MAX_T,
+                    MAX_S,   MAX_T,
+                    MAX_S,   MIN_T,
+            };
 }
