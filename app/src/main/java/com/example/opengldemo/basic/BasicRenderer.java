@@ -42,9 +42,9 @@ public class BasicRenderer implements GLSurfaceView.Renderer
 	public BasicRenderer()
 	{
 		// Initialize the buffers.
-		mCubePositions = ByteBuffer.allocateDirect(CubeUtil.cubePositionData.length * mBytesPerFloat)
+		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat)
         .order(ByteOrder.nativeOrder()).asFloatBuffer();							
-		mCubePositions.put(CubeUtil.cubePositionData).position(0);
+		mCubePositions.put(cubePositionData).position(0);
 		
 		mCubeColors = ByteBuffer.allocateDirect(CubeUtil.cubeColorData.length * mBytesPerFloat)
         .order(ByteOrder.nativeOrder()).asFloatBuffer();							
@@ -153,12 +153,56 @@ public class BasicRenderer implements GLSurfaceView.Renderer
         GLES30.glUseProgram(mPerVertexProgramHandle);
 
         // rotate cube.
+        mCubeColors.position(0);
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
         Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
         Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        drawCube();
 
-        // Draw cube.
+        // rotate cube.
+        mCubeColors.position(4*6);
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, 90, 1.0f, 0.0f, 0.0f);
+        drawCube();
+
+        // rotate cube.
+        mCubeColors.position(8*6);
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, -90, 1.0f, 0.0f, 0.0f);
+        drawCube();
+
+        // rotate cube.
+        mCubeColors.position(12*6);
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, 90, 0.0f, 1.0f, 0.0f);
+        drawCube();
+
+        // rotate cube.
+        mCubeColors.position(16*6);
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, -90, 0.0f, 1.0f, 0.0f);
+        drawCube();
+
+        // rotate cube.
+        mCubeColors.position(20*6);
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -6.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, 180, 0.0f, 1.0f, 0.0f);
         drawCube();
 	}
 
@@ -181,7 +225,6 @@ public class BasicRenderer implements GLSurfaceView.Renderer
         GLES30.glEnableVertexAttribArray(mPositionHandle);
         
         // Pass in the color information
-        mCubeColors.position(0);
         GLES30.glVertexAttribPointer(mColorHandle, mColorDataSize, GLES30.GL_FLOAT, false,
         		0, mCubeColors);
         GLES30.glEnableVertexAttribArray(mColorHandle);
@@ -192,6 +235,17 @@ public class BasicRenderer implements GLSurfaceView.Renderer
         GLES30.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
         // Draw the cube.
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, 36);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_FAN, 0, cubePositionData.length / mPositionDataSize);
 	}
+
+    // X, Y, Z
+    public static final float[] cubePositionData =
+            {
+                    0.0f, 0.0f, 1.0f,
+                    -1.0f, -1.0f, 1.0f,
+                    1.0f, -1.0f, 1.0f,
+                    1.0f, 1.0f, 1.0f,
+                    -1.0f, 1.0f, 1.0f,
+                    -1.0f, -1.0f, 1.0f,
+            };
 }
