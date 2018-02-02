@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".basic.BasicActivity" />
         <activity android:name=".ndk.NativeEGLActivity" />
         <activity android:name=".light.SpotLightActivity" />
         <activity android:name=".light.SpotLightActivity2" />

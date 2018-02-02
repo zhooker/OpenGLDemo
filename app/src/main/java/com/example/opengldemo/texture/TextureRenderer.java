@@ -95,7 +95,7 @@ public class TextureRenderer extends SpotLightRenderer {
                         // Add attenuation.
                         + "   diffuse = diffuse * (1.0 / (1.0 + (0.25 * distance * distance)));  \n"
                         // Multiply the color by the diffuse illumination level to get final output color.
-                        + "   FragColor = mix(texture(u_TextureUnit, v_TextureCoordinates),v_Color * diffuse,0.8); \n"
+                        + "   FragColor = mix(texture(u_TextureUnit, v_TextureCoordinates), v_Color * diffuse,0.8); \n"
                         + "}                                                                     \n";
 
         return perPixelFragmentShader;

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.opengldemo.basic.BasicActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
@@ -16,6 +17,7 @@ import com.example.opengldemo.util.BaseActivity;
 public class MainActivity extends AppCompatActivity {
 
     private static final Class<? extends BaseActivity>[] ACTIVITIES = new Class[]{
+            BasicActivity.class,
             NativeEGLActivity.class,
             SpotLightActivity.class,
             SpotLightActivity2.class,
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private static final String[] ACTIVITIE_DESC = new String[]{
+            "Basic Demo\n  OpenGL基础",
             "NDK Demo\n使用NDK的方式使用 OpenGL",
             "Spot Light Demo\n使用顶点着色器渲染光照",
             "Spot Light Demo 2\n使用片段着色器渲染光照",

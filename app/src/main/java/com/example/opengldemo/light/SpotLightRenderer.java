@@ -179,7 +179,7 @@ public class SpotLightRenderer implements GLSurfaceView.Renderer
 		
 		// Use culling to remove back faces.
 		GLES30.glEnable(GLES30.GL_CULL_FACE);
-		
+
 		// Enable depth testing
 		GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 			
