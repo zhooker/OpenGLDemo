@@ -11,6 +11,7 @@ import com.example.opengldemo.basic.BasicActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
+import com.example.opengldemo.test.stencil.StencilActivity;
 import com.example.opengldemo.texture.TextureActivity;
 import com.example.opengldemo.uniformblock.UniformBlockActivity;
 import com.example.opengldemo.util.BaseActivity;
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
             SpotLightActivity.class,
             SpotLightActivity2.class,
             TextureActivity.class,
-            UniformBlockActivity.class
+            UniformBlockActivity.class,
+            StencilActivity.class
     };
 
     private static final String[] ACTIVITIE_DESC = new String[]{
@@ -32,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
             "Spot Light Demo\n使用顶点着色器渲染光照",
             "Spot Light Demo 2\n使用片段着色器渲染光照",
             "Texture Demo\n使用纹理贴图",
-            "Uniform Block Demo\n使用Uniform Block"
+            "Uniform Block Demo\n使用Uniform Block",
+            "Stencil testing Demo\n模版测试"
     };
 
     @Override
