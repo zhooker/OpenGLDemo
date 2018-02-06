@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.opengldemo.basic.BasicActivity;
+import com.example.opengldemo.camera.CameraActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
             SpotLightActivity2.class,
             TextureActivity.class,
             UniformBlockActivity.class,
-            StencilActivity.class
+            StencilActivity.class,
+            CameraActivity.class
     };
 
     private static final String[] ACTIVITIE_DESC = new String[]{
@@ -35,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
             "Spot Light Demo 2\n使用片段着色器渲染光照",
             "Texture Demo\n使用纹理贴图",
             "Uniform Block Demo\n使用Uniform Block",
-            "Stencil testing Demo\n模版测试"
+            "Stencil testing Demo\n模版测试",
+            "Camera Preview Demo\n使用Camera渲染预览显示"
     };
 
     @Override

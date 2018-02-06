@@ -10,9 +10,9 @@ import android.util.Log;
 public abstract class BaseRendererActivity extends BaseActivity {
 
     protected static final String TAG = "zhuangsj";
-    private final int CONTEXT_CLIENT_VERSION = 3;
+    protected final int CONTEXT_CLIENT_VERSION = 2;
 
-    private GLSurfaceView mGLSurfaceView;
+    protected GLSurfaceView mGLSurfaceView;
 
     @Override
     protected void onCreate ( Bundle savedInstanceState )
