@@ -1,5 +1,6 @@
 package com.example.opengldemo.util;
 
+import android.content.Context;
 import android.opengl.GLES30;
 
 /**
@@ -105,5 +106,11 @@ public class ProgramUtil {
         final int vertexShaderHandle = compileShader(GLES30.GL_VERTEX_SHADER, vertexShader);
         final int fragmentShaderHandle = compileShader(GLES30.GL_FRAGMENT_SHADER, fragmentShader);
         return createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle, attributes);
+    }
+
+    public static int createAndLinkProgram(Context context, final String vertexShader, final String fragmentShader, final String[] attributes) {
+        String vertexSource = AssetsUtils.read(context, vertexShader);
+        String fragmentSource = AssetsUtils.read(context, fragmentShader);
+        return createAndLinkProgram(vertexSource, fragmentSource, attributes);
     }
 }

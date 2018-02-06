@@ -11,6 +11,10 @@ package com.example.opengldemo.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.GLES11Ext;
+import android.opengl.GLES30;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import static android.opengl.GLES20.GL_LINEAR;
 import static android.opengl.GLES20.GL_LINEAR_MIPMAP_LINEAR;
@@ -84,5 +88,35 @@ public class TextureHelper {
         glBindTexture(GL_TEXTURE_2D, 0);
 
         return textureObjectIds[0];
+    }
+
+    public static int loadOESTexture(Bitmap bitmap) {
+        int[] tex = new int[1];
+        //生成一个纹理
+        GLES30.glGenTextures(1, tex, 0);
+        //将此纹理绑定到外部纹理上
+        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, tex[0]);
+        //设置纹理过滤参数
+        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        // Read in the resource
+         if(bitmap != null ) {
+             texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
+             glGenerateMipmap(GL_TEXTURE_2D);
+         }
+
+        //解除纹理绑定
+        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
+        return tex[0];
     }
 }

@@ -42,6 +42,7 @@ public abstract class BaseRendererActivity extends BaseActivity {
         ActivityManager am =
                 ( ActivityManager ) getSystemService ( Context.ACTIVITY_SERVICE );
         ConfigurationInfo info = am.getDeviceConfigurationInfo();
+        L.d("OpenGL ES version = 0x" + Integer.toHexString(info.reqGlEsVersion));
         return ( info.reqGlEsVersion >= 0x30000 );
     }
 

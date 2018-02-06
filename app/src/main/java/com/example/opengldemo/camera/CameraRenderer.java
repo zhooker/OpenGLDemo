@@ -1,17 +1,11 @@
 package com.example.opengldemo.camera;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 
-import com.example.opengldemo.R;
-import com.example.opengldemo.util.CubeUtil;
 import com.example.opengldemo.util.ProgramUtil;
-import com.example.opengldemo.util.TextureHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -20,12 +14,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static android.opengl.GLES20.GL_TEXTURE_2D;
-import static android.opengl.GLES20.glGenerateMipmap;
-import static android.opengl.GLUtils.texImage2D;
-
 /**
- * BasicRenderer
+ * CameraRenderer
  */
 public class CameraRenderer extends BaseCameraRenderer
 {
@@ -45,10 +35,7 @@ public class CameraRenderer extends BaseCameraRenderer
     private int uTextureMatrixLocation;
     private int uTextureSamplerLocation;
 
-    private int mOESTextureId;
-
 	private final int mBytesPerFloat = 4;
-	private final int mPositionDataSize = 2;
 
 
 	public CameraRenderer(GLSurfaceView glSurfaceView)
@@ -59,65 +46,20 @@ public class CameraRenderer extends BaseCameraRenderer
         .order(ByteOrder.nativeOrder()).asFloatBuffer();							
 		mCubePositions.put(cubePositionData).position(0);
 	}
-	
-	protected String getVertexShader()
-	{
-		final String vertexShader =
-			"uniform mat4 uTextureMatrix;   \n"
-          + "uniform mat4 u_MVPMatrix;      \n"
-		  + "attribute vec4 a_Position;            \n"
-		  + "attribute vec4 aTextureCoordinate;    \n"
-		  + "varying vec2 vTextureCoord;        \n"
-		  + "void main()                    \n"
-		  + "{                              \n"
-		  + "   vTextureCoord = (uTextureMatrix * aTextureCoordinate).xy;       \n"
-		  + "   gl_Position = a_Position;              \n"
-		  + "}                                                                  \n";
-		
-		return vertexShader;
-	}
-	
-	protected String getFragmentShader()
-	{
-		final String fragmentShader =
-           "#extension GL_OES_EGL_image_external : require \n"
-		  + "precision mediump float;       \n"
-          + "varying vec2 vTextureCoord;               \n"
-          + "uniform samplerExternalOES uTextureSampler;            \n"
-          + "//out vec4 FragColor;            \n"
-		  + "void main()                    \n"
-		  + "{                              \n"
-		  + "   //FragColor = vec4(1.0f,1.0f,0.0f,1.0f);\n"
-          + "   gl_FragColor = texture2D(uTextureSampler,vTextureCoord);        \n"
-		  + "}                              \n";
-		
-		return fragmentShader;
-	}
-
-    @Override
-    protected int getTextureID() {
-        return mOESTextureId;
-    }
 
     @Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config)
 	{
-        // init texture
-        mOESTextureId = createOESTextureObject();
 	    super.onSurfaceCreated(glUnused,config);
-		// Set the background clear color to black.
-		//GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		
-		// Use culling to remove back faces.
-		//GLES30.glEnable(GLES30.GL_CULL_FACE);
 
-		// Enable depth testing
+		//GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		//GLES30.glEnable(GLES30.GL_CULL_FACE);
 		//GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
         // Position the eye in front of the origin.
         final float eyeX = 0.0f;
         final float eyeY = 0.0f;
-        final float eyeZ = -1.5f;
+        final float eyeZ = 2.0f;
 
         // We are looking toward the distance
         final float lookX = 0.0f;
@@ -133,7 +75,7 @@ public class CameraRenderer extends BaseCameraRenderer
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
         // init program
-		mProgramHandle = ProgramUtil.createAndLinkProgram(getVertexShader(), getFragmentShader(),
+		mProgramHandle = ProgramUtil.createAndLinkProgram(glSurfaceView.getContext(), "camera/vertex_texture.glsl", "camera/fragment_texture.glsl" ,
 				new String[] {"a_Position",  "aTextureCoordinate"});
 
         // Set program handles for cube drawing.
@@ -184,18 +126,10 @@ public class CameraRenderer extends BaseCameraRenderer
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
         GLES30.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
-        drawCube();
-	}
-	
-	/**
-	 * Draws a cube.
-	 */
-    protected void drawCube()
-	{		
-		// Pass in the position information
-		mCubePositions.position(0);		
+        // Pass in the position information
+        mCubePositions.position(0);
         GLES30.glVertexAttribPointer(mPositionHandle, 3, GLES30.GL_FLOAT, false,
-        		5*mBytesPerFloat, mCubePositions);
+                5*mBytesPerFloat, mCubePositions);
         GLES30.glEnableVertexAttribArray(mPositionHandle);
 
         mCubePositions.position(3);
@@ -217,66 +151,4 @@ public class CameraRenderer extends BaseCameraRenderer
                     -1f, -1f, 0.0f, 0f,  0f,
                     1f, -1f,  0.0f, 1f,  0f
             };
-
-    public int createOESTextureObject() {
-        int[] tex = new int[1];
-        //生成一个纹理
-        GLES30.glGenTextures(1, tex, 0);
-        //将此纹理绑定到外部纹理上
-        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, tex[0]);
-        //设置纹理过滤参数
-        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-        GLES30.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-        // Read in the resource
-//        final Bitmap bitmap = BitmapFactory.decodeResource(
-//                glSurfaceView.getContext().getResources(), R.drawable.wall, options);
-//        texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
-//        glGenerateMipmap(GL_TEXTURE_2D);
-//        bitmap.recycle();
-
-        //解除纹理绑定
-        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
-        return tex[0];
-    }
-
-    public int createTextureObject() {
-        int[] tex = new int[1];
-        //生成一个纹理
-        GLES30.glGenTextures(1, tex, 0);
-        //将此纹理绑定到外部纹理上
-        GLES30.glBindTexture(GL_TEXTURE_2D, tex[0]);
-        //设置纹理过滤参数
-        GLES30.glTexParameterf(GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-        GLES30.glTexParameterf(GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-        GLES30.glTexParameterf(GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-        GLES30.glTexParameterf(GL_TEXTURE_2D,
-                GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-        // Read in the resource
-//        final Bitmap bitmap = BitmapFactory.decodeResource(
-//                glSurfaceView.getContext().getResources(), R.drawable.wall, options);
-//        texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
-//        glGenerateMipmap(GL_TEXTURE_2D);
-//        bitmap.recycle();
-
-        //解除纹理绑定
-        GLES30.glBindTexture(GL_TEXTURE_2D, 0);
-        return tex[0];
-    }
 }

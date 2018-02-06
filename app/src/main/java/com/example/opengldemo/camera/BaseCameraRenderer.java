@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 
 import com.example.opengldemo.util.L;
+import com.example.opengldemo.util.TextureHelper;
 
 import java.io.IOException;
 
@@ -15,37 +16,51 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * BaseCameraRenderer
  */
-public class BaseCameraRenderer implements GLSurfaceView.Renderer
+public abstract class BaseCameraRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener
 {
 
-    protected Camera mCamera;
+    protected CameraManager mCameraManager;
     protected SurfaceTexture surfaceTexture;
     protected GLSurfaceView glSurfaceView;
+
+    protected int mOESTextureId;
     protected float[] transformMatrix = new float[16];
 
     public BaseCameraRenderer(GLSurfaceView glSurfaceView) {
         this.glSurfaceView = glSurfaceView;
+        this.mCameraManager = new CameraManager();
     }
 
     @Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) 
 	{
-        surfaceTexture = new SurfaceTexture(getTextureID());
+        mOESTextureId = TextureHelper.loadOESTexture(null);
+        surfaceTexture = new SurfaceTexture(mOESTextureId);
+        surfaceTexture.setOnFrameAvailableListener(this);
 
-        openCamera();
+        if (mCameraManager.openCamera(Camera.CameraInfo.CAMERA_FACING_FRONT)) {
+            mCameraManager.setDisplayOrientation(90);
+            try {
+                mCameraManager.setPreviewTexture(surfaceTexture);
+                Camera.Parameters parameters = mCameraManager.getParameters();
+                if (parameters != null) {
+                    initCameraInfo(parameters);
+                    mCameraManager.setParameters(parameters);
+                }
+                mCameraManager.startPreview();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
-    protected int getTextureID() {
-        return 0;
-    }
-		
-	@Override
-	public void onSurfaceChanged(GL10 glUnused, int width, int height) 
-	{
-        surfaceTexture.setOnFrameAvailableListener(onFrameAvailableListener);
-	}	
+    @Override
+    public void onSurfaceChanged(GL10 glUnused, int width, int height)
+    {
 
-	@Override
+    }
+
+    @Override
 	public void onDrawFrame(GL10 glUnused) 
 	{
         if (surfaceTexture != null) {
@@ -56,38 +71,19 @@ public class BaseCameraRenderer implements GLSurfaceView.Renderer
         }
     }
 
-    private void openCamera(){
-        try {
-            mCamera = getCameraInstance();
-            mCamera.setPreviewTexture(surfaceTexture);
-            mCamera.startPreview();
-        }catch (IOException e){
-
-        }
+    protected void initCameraInfo(Camera.Parameters parameters){
+        parameters.setPreviewSize(1920, 1080);
     }
 
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(1);
-            Camera.Parameters parameters = c.getParameters();
-            parameters.set("orientation", "portrait");
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            parameters.setPictureFormat(PixelFormat.JPEG);
-            parameters.setPreviewSize(1280, 720);
-            c.setDisplayOrientation(90);
-            c.setParameters(parameters);
-        } catch (Exception e){
-            L.d("open camera error : " + e.getMessage());
-        }
-        return c;
+    @Override
+    public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+        glSurfaceView.requestRender();
     }
 
-    private SurfaceTexture.OnFrameAvailableListener onFrameAvailableListener = new SurfaceTexture.OnFrameAvailableListener() {
-
-        @Override
-        public void onFrameAvailable(SurfaceTexture surfaceTexture) {
-            glSurfaceView.requestRender();
+    public void closeRenderer() {
+        mCameraManager.closeCamera();
+        if (surfaceTexture != null) {
+            surfaceTexture.release();
         }
-    };
+    }
 }
