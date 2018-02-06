@@ -14,6 +14,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class UniformBlockRenderer extends SpotLightRenderer2 {
 
 
+    protected static final int BINDING_POINTS = 1;
+
     protected String getVertexShader()
     {
         // Define our per-pixel lighting shader.
@@ -71,11 +73,11 @@ public class UniformBlockRenderer extends SpotLightRenderer2 {
         GLES30.glBindBuffer(GLES30.GL_UNIFORM_BUFFER, textureObjectIds[0]);
         GLES30.glBufferData(GLES30.GL_UNIFORM_BUFFER, 3 * 4 * 4 * mBytesPerFloat, null, GLES30.GL_STATIC_DRAW);
         GLES30.glBindBuffer(GLES30.GL_UNIFORM_BUFFER, 0);
-        GLES30.glBindBufferRange(GLES30.GL_UNIFORM_BUFFER, 0, textureObjectIds[0], 0, 3 * 4 * 4 * mBytesPerFloat);
+        GLES30.glBindBufferRange(GLES30.GL_UNIFORM_BUFFER, BINDING_POINTS, textureObjectIds[0], 0, 3 * 4 * 4 * mBytesPerFloat);
 
         // 绑定 program 到 binding point 0, 这样program才能与buffer相通
         int uniformBlockIndexRed    = GLES30.glGetUniformBlockIndex(mPerVertexProgramHandle, "Matrices");
-        GLES30.glUniformBlockBinding(mPerVertexProgramHandle, uniformBlockIndexRed, 0);
+        GLES30.glUniformBlockBinding(mPerVertexProgramHandle, uniformBlockIndexRed, BINDING_POINTS);
 
         // 设置 mViewMatrix 到 Uniform Block
         mVBuffer.clear();
