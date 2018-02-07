@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 
 import com.example.opengldemo.basic.BasicActivity;
 import com.example.opengldemo.camera.CameraActivity;
+import com.example.opengldemo.camera2.Camera2Activity;
+import com.example.opengldemo.camera3.Camera3Activity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
@@ -27,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
             TextureActivity.class,
             UniformBlockActivity.class,
             StencilActivity.class,
-            CameraActivity.class
+            CameraActivity.class,
+            Camera2Activity.class,
+            Camera3Activity.class
     };
 
     private static final String[] ACTIVITIE_DESC = new String[]{
@@ -38,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
             "Texture Demo\n使用纹理贴图",
             "Uniform Block Demo\n使用Uniform Block",
             "Stencil testing Demo\n模版测试",
-            "Camera Preview Demo\n使用Camera渲染预览显示"
+            "Camera Preview Demo\n使用Camera渲染预览显示",
+            "Camera Demo\n通过Shader实现YUV转换RBG",
+            "Camera2 Demo\n使用camera2, 通过Shader实现YUV转换RBG"
     };
 
     @Override
