@@ -27,6 +27,7 @@
         <activity android:name=".texture.TextureActivity" />
         <activity android:name=".uniformblock.UniformBlockActivity" />
         <activity android:name=".test.stencil.StencilActivity" />
+        <activity android:name=".save.SaveActivity" />
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".camera2.Camera2Activity" />
         <activity android:name=".camera3.Camera3Activity" />

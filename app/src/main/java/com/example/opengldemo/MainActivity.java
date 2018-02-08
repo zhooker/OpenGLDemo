@@ -14,6 +14,7 @@ import com.example.opengldemo.camera3.Camera3Activity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
+import com.example.opengldemo.save.SaveActivity;
 import com.example.opengldemo.test.stencil.StencilActivity;
 import com.example.opengldemo.texture.TextureActivity;
 import com.example.opengldemo.uniformblock.UniformBlockActivity;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
             TextureActivity.class,
             UniformBlockActivity.class,
             StencilActivity.class,
+            SaveActivity.class,
             CameraActivity.class,
             Camera2Activity.class,
             Camera3Activity.class
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             "Texture Demo\n使用纹理贴图",
             "Uniform Block Demo\n使用Uniform Block",
             "Stencil testing Demo\n模版测试",
+            "Save Image Demo\n利用Opengl保存图片,包括 FBO",
             "Camera Preview Demo\n使用Camera渲染预览显示",
             "Camera Demo\n通过Shader实现YUV转换RBG",
             "Camera2 Demo\n使用camera2, 通过Shader实现YUV转换RBG"

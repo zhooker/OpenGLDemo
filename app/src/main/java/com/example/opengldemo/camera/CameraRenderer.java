@@ -5,7 +5,10 @@ import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+import com.example.opengldemo.R;
+import com.example.opengldemo.save.Drawer;
 import com.example.opengldemo.util.ProgramUtil;
+import com.example.opengldemo.util.TextureHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -13,6 +16,8 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static android.opengl.GLES20.GL_TEXTURE_2D;
 
 /**
  * CameraRenderer
@@ -34,8 +39,11 @@ public class CameraRenderer extends BaseCameraRenderer
 	private int aTextureCoordLocation;
     private int uTextureMatrixLocation;
     private int uTextureSamplerLocation;
+    private int uTextureSampler0Location;
 
 	private final int mBytesPerFloat = 4;
+
+    protected int mTextureId;
 
 
 	public CameraRenderer(GLSurfaceView glSurfaceView)
@@ -84,7 +92,9 @@ public class CameraRenderer extends BaseCameraRenderer
         mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
         uTextureMatrixLocation = GLES30.glGetUniformLocation(mProgramHandle, "uTextureMatrix");
         uTextureSamplerLocation = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler");
+        uTextureSampler0Location = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler0");
 
+        mTextureId = TextureHelper.loadTexture(glSurfaceView.getContext(), R.drawable.amaro_mask1);
     }
 		
 	@Override
@@ -117,6 +127,10 @@ public class CameraRenderer extends BaseCameraRenderer
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mOESTextureId);
         GLES30.glUniform1i(uTextureSamplerLocation, 0);
+
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
+        GLES30.glBindTexture(GL_TEXTURE_2D, mTextureId);
+        GLES30.glUniform1i(uTextureSampler0Location, 1);
 
         //将纹理矩阵传给片段着色器
         GLES30.glUniformMatrix4fv(uTextureMatrixLocation, 1, false, transformMatrix, 0);
