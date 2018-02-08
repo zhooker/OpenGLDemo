@@ -7,6 +7,7 @@ import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.util.Size;
 
 import com.example.opengldemo.R;
 import com.example.opengldemo.util.CubeUtil;
@@ -51,6 +52,7 @@ public class SaveRenderer implements GLSurfaceView.Renderer
 	private final int mTextureDataSize = 2;
 
     private Context context;
+    private Size size;
 
 	public SaveRenderer(Context context)
 	{
@@ -118,6 +120,8 @@ public class SaveRenderer implements GLSurfaceView.Renderer
 		// Set the OpenGL viewport to the same size as the surface.
 		GLES30.glViewport(0, 0, width, height);
 
+        size = new Size(width,height);
+
 		// Create a new perspective projection matrix. The height will stay the same
 		// while the width will vary as per aspect ratio.
 		final float ratio = (float) width / height;
@@ -151,7 +155,7 @@ public class SaveRenderer implements GLSurfaceView.Renderer
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         GLES30.glUseProgram(mPerVertexProgramHandle);
-        GLES30.glViewport(0, 0, 1080, 921);
+        GLES30.glViewport(0, 0, size.getWidth(), size.getHeight());
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
         GLES30.glEnable(GLES30.GL_DEPTH_TEST);
         //GLES30.glClearColor(0, 0, 0, 1);
