@@ -19,6 +19,7 @@ import com.example.opengldemo.test.stencil.StencilActivity;
 import com.example.opengldemo.texture.TextureActivity;
 import com.example.opengldemo.uniformblock.UniformBlockActivity;
 import com.example.opengldemo.util.BaseActivity;
+import com.example.opengldemo.vao.VAOActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
             SpotLightActivity.class,
             SpotLightActivity2.class,
             TextureActivity.class,
+            VAOActivity.class,
             UniformBlockActivity.class,
             StencilActivity.class,
             SaveActivity.class,
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             "Spot Light Demo\n使用顶点着色器渲染光照",
             "Spot Light Demo 2\n使用片段着色器渲染光照",
             "Texture Demo\n使用纹理贴图",
+            "VAO Demo\n使用 VAO、VBO、EBO的例子",
             "Uniform Block Demo\n使用Uniform Block",
             "Stencil testing Demo\n模版测试",
             "Save Image Demo\n利用Opengl保存图片,包括 FBO",

@@ -34,6 +34,7 @@ public class SaveRenderer implements GLSurfaceView.Renderer
 
 	/** Store our model data in a float buffer. */
 	private final FloatBuffer mCubePositions;
+    private final FloatBuffer mCubePositions2;
     private final FloatBuffer mCubeColors;
 
     protected int mSimpleProgramHandle;
@@ -61,6 +62,10 @@ public class SaveRenderer implements GLSurfaceView.Renderer
 		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat)
         .order(ByteOrder.nativeOrder()).asFloatBuffer();
 		mCubePositions.put(cubePositionData).position(0);
+
+        mCubePositions2 = ByteBuffer.allocateDirect(cubePositionData2.length * mBytesPerFloat)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mCubePositions2.put(cubePositionData2).position(0);
 
         mCubeColors = ByteBuffer.allocateDirect(cubeColorData.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -149,7 +154,10 @@ public class SaveRenderer implements GLSurfaceView.Renderer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBufferID);
         GLES30.glUseProgram(mSimpleProgramHandle);
         GLES30.glViewport(0, 0, 128, 128);
-        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
+        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
+        // 没了禁止 深度深度测试的的时候，1.0是画不出来的，因为clear之后深度都是1,0，比1.0小的才保留
+        // 因为FBO没有深度缓冲区，而你打开了深度测试，才会千万这样的结果
+        GLES30.glDisable(GLES30.GL_DEPTH_TEST);
         //GLES30.glClearColor(1, 1, 1, 1);
         drawCube2();
 
@@ -275,9 +283,9 @@ public class SaveRenderer implements GLSurfaceView.Renderer
     protected void drawCube2()
     {
         int positionHandle = GLES30.glGetAttribLocation(mSimpleProgramHandle, "a_Position");
-        mCubePositions.position(0);
+        mCubePositions2.position(0);
         GLES30.glVertexAttribPointer(positionHandle, mPositionDataSize, GLES30.GL_FLOAT, false,
-                5*mBytesPerFloat, mCubePositions);
+                5*mBytesPerFloat, mCubePositions2);
         GLES30.glEnableVertexAttribArray(positionHandle);
 
         int colorHandle = GLES30.glGetAttribLocation(mSimpleProgramHandle, "a_Color");
@@ -300,15 +308,31 @@ public class SaveRenderer implements GLSurfaceView.Renderer
         return result;
     }
 
+static float z = 1.0f;
+
     // X, Y, Z
     public static final float[] cubePositionData =
             {
-                    0.0f, 0.0f, 1.0f,         0.5f, 0.5f,
-                    -1.0f, -1.0f, 1.0f,       0f, 1f,
-                    1.0f, -1.0f, 1.0f,        1f, 1f,
-                    1.0f, 1.0f, 1.0f,         1f, 0f,
-                    -1.0f, 1.0f, 1.0f,        0f, 0f,
-                    -1.0f, -1.0f, 1.0f,       0f, 1f
+                    0.0f, 0.0f, z,         0.5f, 0.5f,
+                    -1.0f, -1.0f, z,       0f, 1f,
+                    1.0f, -1.0f, z,        1f, 1f,
+                    1.0f, 1.0f, z,         1f, 0f,
+                    -1.0f, 1.0f, z,        0f, 0f,
+                    -1.0f, -1.0f, z,       0f, 1f
+            };
+
+
+    static float z2 = 1f;
+
+    // X, Y, Z
+    public static final float[] cubePositionData2 =
+            {
+                    0.0f, 0.0f, z2,         0.5f, 0.5f,
+                    -1.0f, -1.0f, z2,       0f, 1f,
+                    1.0f, -1.0f, z2,        1f, 1f,
+                    1.0f, 1.0f, z2,         1f, 0f,
+                    -1.0f, 1.0f, z2,        0f, 0f,
+                    -1.0f, -1.0f, z2,       0f, 1f
             };
 
     public static final float[] cubeColorData =

@@ -25,6 +25,7 @@
         <activity android:name=".light.SpotLightActivity" />
         <activity android:name=".light.SpotLightActivity2" />
         <activity android:name=".texture.TextureActivity" />
+        <activity android:name=".vao.VAOActivity" />
         <activity android:name=".uniformblock.UniformBlockActivity" />
         <activity android:name=".test.stencil.StencilActivity" />
         <activity android:name=".save.SaveActivity" />
