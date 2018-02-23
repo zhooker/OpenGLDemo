@@ -9,10 +9,15 @@
 package com.example.opengldemo.util;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES30;
+import android.opengl.GLUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -90,6 +95,37 @@ public class TextureHelper {
         return textureObjectIds[0];
     }
 
+    public static int loadTexture(Context context, String filename) {
+        final int[] textureObjectIds = new int[1];
+        glGenTextures(1, textureObjectIds, 0);
+
+        if (textureObjectIds[0] == 0) {
+            L.d("Could not generate a new OpenGL texture object.");
+            return 0;
+        }
+
+        final Bitmap bitmap = getImageFromAssetsFile(context,filename);
+
+        // Bind to the texture in OpenGL
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureObjectIds[0]);
+
+        // Set filtering
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        // Recycle the bitmap, since its data has been loaded into OpenGL.
+        bitmap.recycle();
+
+        // Unbind from the texture.
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        return textureObjectIds[0];
+    }
+
     public static int loadOESTexture(Bitmap bitmap) {
         int[] tex = new int[1];
         //生成一个纹理
@@ -118,5 +154,18 @@ public class TextureHelper {
         //解除纹理绑定
         GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
         return tex[0];
+    }
+
+    private static Bitmap getImageFromAssetsFile(Context context,String fileName) {
+        Bitmap image = null;
+        AssetManager am = context.getResources().getAssets();
+        try {
+            InputStream is = am.open(fileName);
+            image = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return image;
     }
 }

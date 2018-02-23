@@ -1,12 +1,10 @@
 package com.example.opengldemo.camera2;
 
-import android.opengl.GLES11Ext;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.example.opengldemo.R;
-import com.example.opengldemo.camera.BaseCameraRenderer;
 import com.example.opengldemo.util.ProgramUtil;
 import com.example.opengldemo.util.TextureHelper;
 
@@ -20,7 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 
 /**
- * CameraRenderer
+ * CameraFilterRenderer
  */
 public class Camera2Renderer implements GLSurfaceView.Renderer
 {
@@ -35,8 +33,12 @@ public class Camera2Renderer implements GLSurfaceView.Renderer
     protected int mMVPMatrixHandle;
     protected int aTextureCoordLocation;
     protected int uTextureSamplerLocation;
+    protected int uTextureSamplerLocation1;
+    protected int uTextureSamplerLocation2;
 
     protected int mTextureId;
+    protected int mTextureId1;
+    protected int mTextureId2;
 
     protected GLSurfaceView glSurfaceView;
     private final FloatBuffer mCubePositions;
@@ -76,7 +78,7 @@ public class Camera2Renderer implements GLSurfaceView.Renderer
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
         // init program
-		mProgramHandle = ProgramUtil.createAndLinkProgram(glSurfaceView.getContext(), "camera2/vertex_texture.glsl", "camera2/fragment_texture.glsl" ,
+		mProgramHandle = ProgramUtil.createAndLinkProgram(glSurfaceView.getContext(), "camera/vertex_texture.glsl", "camera/fragment_texture.glsl",
 				new String[] {"a_Position",  "aTextureCoordinate"});
 
         // Set program handles for cube drawing.
@@ -84,6 +86,8 @@ public class Camera2Renderer implements GLSurfaceView.Renderer
         aTextureCoordLocation = GLES30.glGetAttribLocation(mProgramHandle, "aTextureCoordinate");
         mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
         uTextureSamplerLocation = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler");
+        uTextureSamplerLocation1 = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler1");
+        uTextureSamplerLocation2 = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler2");
 
         mTextureId = TextureHelper.loadTexture(glSurfaceView.getContext(), R.drawable.wall);
     }

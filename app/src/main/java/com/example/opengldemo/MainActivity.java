@@ -1,16 +1,20 @@
 package com.example.opengldemo;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.opengldemo.basic.BasicActivity;
+import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.camera.CameraActivity;
 import com.example.opengldemo.camera2.Camera2Activity;
-import com.example.opengldemo.camera3.Camera3Activity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
@@ -19,9 +23,12 @@ import com.example.opengldemo.test.stencil.StencilActivity;
 import com.example.opengldemo.texture.TextureActivity;
 import com.example.opengldemo.uniformblock.UniformBlockActivity;
 import com.example.opengldemo.util.BaseActivity;
+import com.example.opengldemo.util.L;
 import com.example.opengldemo.vao.VAOActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    protected static final int REQUEST_CAMERA = 0;
 
     private static final Class<? extends BaseActivity>[] ACTIVITIES = new Class[]{
             BasicActivity.class,
@@ -33,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
             UniformBlockActivity.class,
             StencilActivity.class,
             SaveActivity.class,
+            CameraFilterActivity.class,
             CameraActivity.class,
-            Camera2Activity.class,
-            Camera3Activity.class
+            Camera2Activity.class
     };
 
     private static final String[] ACTIVITIE_DESC = new String[]{
@@ -48,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
             "Uniform Block Demo\n使用Uniform Block",
             "Stencil testing Demo\n模版测试",
             "Save Image Demo\n利用Opengl保存图片,包括 FBO",
-            "Camera Preview Demo\n使用Camera渲染预览显示",
-            "Camera Demo\n通过Shader实现YUV转换RBG",
-            "Camera2 Demo\n使用camera2, 通过Shader实现YUV转换RBG"
+            "Camera Filter Demo\n使用Camera实现简单的滤镜效果",
+            "Camera Demo\n使用camera实现预览",
+            "Camera2 Demo\n使用camera2实现预览"
     };
 
     @Override
@@ -70,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
             btn.setText((i + 1) + "、" + ACTIVITIE_DESC[i]);
             container.addView(btn);
         }
+
+        requestCameraPermission();
     }
+
 
     private Button createButton() {
         Button btn = new Button(this);
@@ -80,5 +90,25 @@ public class MainActivity extends AppCompatActivity {
         btn.setLineSpacing(1.2f, 1.2f);
         btn.setPadding(5, 30, 5, 30);
         return btn;
+    }
+
+    protected void requestCameraPermission() {
+        L.d("相机权限未被授予，需要申请！");
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_CAMERA);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA) {
+            for (int result: grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    L.d("相机权限申请失败，退出程序！");
+                    finish();
+                    return;
+                }
+            }
+        }
     }
 }

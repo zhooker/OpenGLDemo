@@ -1,4 +1,4 @@
-package com.example.opengldemo.camera;
+package com.example.opengldemo.filter;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;

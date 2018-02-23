@@ -1,12 +1,10 @@
 package com.example.opengldemo.camera;
 
-import android.opengl.GLES11Ext;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.example.opengldemo.R;
-import com.example.opengldemo.save.Drawer;
 import com.example.opengldemo.util.ProgramUtil;
 import com.example.opengldemo.util.TextureHelper;
 
@@ -20,35 +18,30 @@ import javax.microedition.khronos.opengles.GL10;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 
 /**
- * CameraRenderer
+ * CameraFilterRenderer
  */
-public class CameraRenderer extends BaseCameraRenderer
+public class CameraRenderer implements GLSurfaceView.Renderer
 {
-
+    protected final int mBytesPerFloat = 4;
     private float[] mModelMatrix = new float[16];
     private float[] mViewMatrix = new float[16];
     private float[] mProjectionMatrix = new float[16];
     private float[] mMVPMatrix = new float[16];
 
-	/** Store our model data in a float buffer. */
-	private final FloatBuffer mCubePositions;
-
     protected int mProgramHandle;
-	private int mPositionHandle;
-    private int mMVPMatrixHandle;
-	private int aTextureCoordLocation;
-    private int uTextureMatrixLocation;
-    private int uTextureSamplerLocation;
-    private int uTextureSampler0Location;
-
-	private final int mBytesPerFloat = 4;
+    protected int mPositionHandle;
+    protected int mMVPMatrixHandle;
+    protected int aTextureCoordLocation;
+    protected int uTextureSamplerLocation;
 
     protected int mTextureId;
 
+    protected GLSurfaceView glSurfaceView;
+    private final FloatBuffer mCubePositions;
 
 	public CameraRenderer(GLSurfaceView glSurfaceView)
 	{
-        super(glSurfaceView);
+        this.glSurfaceView = glSurfaceView;
         // Initialize the buffers.
 		mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat)
         .order(ByteOrder.nativeOrder()).asFloatBuffer();							
@@ -58,8 +51,6 @@ public class CameraRenderer extends BaseCameraRenderer
     @Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config)
 	{
-	    super.onSurfaceCreated(glUnused,config);
-
 		//GLES30.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		//GLES30.glEnable(GLES30.GL_CULL_FACE);
 		//GLES30.glEnable(GLES30.GL_DEPTH_TEST);
@@ -83,24 +74,21 @@ public class CameraRenderer extends BaseCameraRenderer
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
         // init program
-		mProgramHandle = ProgramUtil.createAndLinkProgram(glSurfaceView.getContext(), "camera/vertex_texture.glsl", "camera/fragment_texture.glsl" ,
+		mProgramHandle = ProgramUtil.createAndLinkProgram(glSurfaceView.getContext(), "camera/vertex_texture.glsl", "camera/fragment_texture.glsl",
 				new String[] {"a_Position",  "aTextureCoordinate"});
 
         // Set program handles for cube drawing.
         mPositionHandle = GLES30.glGetAttribLocation(mProgramHandle, "a_Position");
         aTextureCoordLocation = GLES30.glGetAttribLocation(mProgramHandle, "aTextureCoordinate");
         mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
-        uTextureMatrixLocation = GLES30.glGetUniformLocation(mProgramHandle, "uTextureMatrix");
         uTextureSamplerLocation = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler");
-        uTextureSampler0Location = GLES30.glGetUniformLocation(mProgramHandle, "uTextureSampler0");
 
-        mTextureId = TextureHelper.loadTexture(glSurfaceView.getContext(), R.drawable.amaro_mask1);
+        mTextureId = TextureHelper.loadTexture(glSurfaceView.getContext(), R.drawable.wall);
     }
 		
 	@Override
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) 
 	{
-	    super.onSurfaceChanged(glUnused,width,height);
 		// Set the OpenGL viewport to the same size as the surface.
 		GLES30.glViewport(0, 0, width, height);
 
@@ -118,22 +106,14 @@ public class CameraRenderer extends BaseCameraRenderer
 	@Override
 	public void onDrawFrame(GL10 glUnused) 
 	{
-	    super.onDrawFrame(glUnused);
 		GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
 
         // Set our per-vertex lighting program.
         GLES30.glUseProgram(mProgramHandle);
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
-        GLES30.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mOESTextureId);
-        GLES30.glUniform1i(uTextureSamplerLocation, 0);
-
-        GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
         GLES30.glBindTexture(GL_TEXTURE_2D, mTextureId);
-        GLES30.glUniform1i(uTextureSampler0Location, 1);
-
-        //将纹理矩阵传给片段着色器
-        GLES30.glUniformMatrix4fv(uTextureMatrixLocation, 1, false, transformMatrix, 0);
+        GLES30.glUniform1i(uTextureSamplerLocation, 0);
 
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
