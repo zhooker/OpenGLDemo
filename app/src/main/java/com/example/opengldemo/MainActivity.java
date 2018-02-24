@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.opengldemo.basic.BasicActivity;
+import com.example.opengldemo.blend.BlendActivity;
 import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.camera.CameraActivity;
 import com.example.opengldemo.camera2.Camera2Activity;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             SpotLightActivity.class,
             SpotLightActivity2.class,
             TextureActivity.class,
+            BlendActivity.class,
             VAOActivity.class,
             UniformBlockActivity.class,
             StencilActivity.class,
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             "Spot Light Demo\n使用顶点着色器渲染光照",
             "Spot Light Demo 2\n使用片段着色器渲染光照",
             "Texture Demo\n使用纹理贴图",
+            "Blend Demo\n混合示例",
             "VAO Demo\n使用 VAO、VBO、EBO的例子",
             "Uniform Block Demo\n使用Uniform Block",
             "Stencil testing Demo\n模版测试",
