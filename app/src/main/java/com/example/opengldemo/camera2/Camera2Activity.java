@@ -3,6 +3,7 @@ package com.example.opengldemo.camera2;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.hardware.camera2.CameraAccessException;
@@ -22,6 +23,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Size;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.opengldemo.R;
@@ -42,6 +44,15 @@ public class Camera2Activity extends BaseActivity {
     private String mCameraID;//摄像头Id 0 为后  1 为前
     private ImageReader mImageReader;
     private CameraCaptureSession mCameraCaptureSession;
+    private ImageView imageView = null;
+
+
+    private Presenter mPresenter = new Presenter(new Presenter.IView() {
+        @Override
+        public void onProcess(Bitmap bitmap) {
+            imageView.setImageBitmap(bitmap);
+        }
+    });
 
     @Override
     protected void onCreate ( Bundle savedInstanceState )
@@ -57,6 +68,8 @@ public class Camera2Activity extends BaseActivity {
         SurfaceHolder mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
         mSurfaceHolder.addCallback(mSurfaceCallback);
+
+        imageView = findViewById(R.id.tv_image);
     }
 
     @Override
@@ -97,10 +110,18 @@ public class Camera2Activity extends BaseActivity {
                 //我们可以将这帧数据转成字节数组，类似于Camera1的PreviewCallback回调的预览帧数据
                 if (image != null) {
                     ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                    byte[] bytes = new byte[buffer.remaining()];
+                    buffer.get(bytes);
 
+
+
+                    L.d("<------------------------------");
                     L.d("image format: " +image.getFormat());
                     L.d("width  " + image.getWidth());
                     L.d("height  " + image.getHeight());
+
+                    mPresenter.process(image);
+
 
                     // 从image里获取三个plane
                     Image.Plane[] planes = image.getPlanes();
@@ -112,6 +133,9 @@ public class Camera2Activity extends BaseActivity {
                         L.d("Size   " + iSize);
                         L.d("Finished reading data from plane  " + i);
                     }
+
+                    L.d("------------------------------>");
+
                     image.close();
                 }
             }
