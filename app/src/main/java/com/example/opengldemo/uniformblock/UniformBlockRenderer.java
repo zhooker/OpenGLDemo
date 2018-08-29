@@ -1,7 +1,8 @@
 package com.example.opengldemo.uniformblock;
 
+import android.content.Context;
 import android.opengl.GLES30;
-import com.example.opengldemo.light.SpotLightRenderer2;
+import com.example.opengldemo.light.LightRenderer2;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,10 +12,14 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  *  UniformBlockRenderer 2018/2/2
  */
-public class UniformBlockRenderer extends SpotLightRenderer2 {
+public class UniformBlockRenderer extends LightRenderer2 {
 
 
     protected static final int BINDING_POINTS = 1;
+
+    public UniformBlockRenderer(Context context) {
+        super(context);
+    }
 
     protected String getVertexShader()
     {

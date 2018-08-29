@@ -8,6 +8,6 @@ public class SpotLightActivity extends BaseRendererActivity {
 
     @Override
     protected GLSurfaceView.Renderer getRenderer() {
-        return new SpotLightRenderer();
+        return new LightRenderer(this);
     }
 }

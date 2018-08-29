@@ -2,13 +2,16 @@ package com.example.opengldemo.texture;
 
 import android.content.Context;
 import android.opengl.GLES30;
+
 import com.example.opengldemo.R;
-import com.example.opengldemo.light.SpotLightRenderer;
+import com.example.opengldemo.light.LightRenderer;
 import com.example.opengldemo.util.CubeUtil;
 import com.example.opengldemo.util.TextureHelper;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -16,9 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
  * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
  * renderers -- the static class GLES30 is used instead.
  */
-public class TextureRenderer extends SpotLightRenderer {
-
-    private Context mContext;
+public class TextureRenderer extends LightRenderer {
 
     private int textureId;
     private int mTextureHandle;
@@ -26,20 +27,17 @@ public class TextureRenderer extends SpotLightRenderer {
     private final FloatBuffer mCubesTexture;
 
     public TextureRenderer(Context context) {
-        super();
+        super(context);
         // init textureId
         mCubesTexture = ByteBuffer.allocateDirect(CubeUtil.cubeTextureData.length * 4)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
         mCubesTexture.put(CubeUtil.cubeTextureData).position(0);
-
-        this.mContext = context;
     }
 
-    protected String getVertexShader()
-    {
+    protected String getVertexShader() {
         // Define our per-pixel lighting shader.
         final String perPixelVertexShader =
-                          "#version 300 es                \n"
+                "#version 300 es                \n"
                         + "uniform mat4 u_MVPMatrix;      \n"
                         + "uniform mat4 u_MVMatrix;       \n"
 
@@ -64,24 +62,23 @@ public class TextureRenderer extends SpotLightRenderer {
                         // gl_Position is a special variable used to store the final position.
                         // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.
                         + "   gl_Position = u_MVPMatrix * a_Position;                 \n"
-                                  + "   v_TextureCoordinates = a_TextureCoordinates;                            \n"
+                        + "   v_TextureCoordinates = a_TextureCoordinates;                            \n"
                         + "}                                                          \n";
 
         return perPixelVertexShader;
     }
 
-    protected String getFragmentShader()
-    {
+    protected String getFragmentShader() {
         final String perPixelFragmentShader =
-                          "#version 300 es                \n"
+                "#version 300 es                \n"
                         + "precision mediump float;       \n"
                         + "uniform vec3 u_LightPos;       \n"
 
                         + "in vec3 v_Position;		      \n"
                         + "in vec4 v_Color;               \n"
                         + "in vec3 v_Normal;              \n"
-                                  + "uniform sampler2D u_TextureUnit;         \n"
-                                  + "in vec2 v_TextureCoordinates;            \n"
+                        + "uniform sampler2D u_TextureUnit;         \n"
+                        + "in vec2 v_TextureCoordinates;            \n"
                         + "out vec4 FragColor;            \n"
                         + "void main()                    \n"
                         + "{                              \n"
@@ -109,8 +106,8 @@ public class TextureRenderer extends SpotLightRenderer {
     }
 
     @Override
-    protected void initHandles() {
-        super.initHandles();
+    protected void initHandlers() {
+        super.initHandlers();
         mTextureCoordindate = 3;//GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_TextureCoordinates");
         mTextureHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_TextureUnit");
     }

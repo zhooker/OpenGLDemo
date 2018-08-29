@@ -4,11 +4,8 @@ import android.content.Context;
 import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.os.SystemClock;
 
 import com.example.opengldemo.R;
-import com.example.opengldemo.light.SpotLightRenderer;
-import com.example.opengldemo.util.CubeUtil;
 import com.example.opengldemo.util.ProgramUtil;
 import com.example.opengldemo.util.TextureHelper;
 
@@ -58,11 +55,10 @@ public class BlendRenderer implements GLSurfaceView.Renderer {
         this.mContext = context;
     }
 
-    protected String getVertexShader()
-    {
+    protected String getVertexShader() {
         // Define our per-pixel lighting shader.
         final String perPixelVertexShader =
-                          "#version 300 es                \n"
+                "#version 300 es                \n"
                         + "uniform mat4 u_MVPMatrix;      \n"
                         + "layout (location = 0) in vec4 a_Position;            \n"
                         + "layout (location = 1) in vec2 a_TextureCoordinates;  \n"
@@ -76,10 +72,9 @@ public class BlendRenderer implements GLSurfaceView.Renderer {
         return perPixelVertexShader;
     }
 
-    protected String getFragmentShader()
-    {
+    protected String getFragmentShader() {
         final String perPixelFragmentShader =
-                          "#version 300 es                \n"
+                "#version 300 es                \n"
                         + "precision mediump float;       \n"
                         + "uniform sampler2D u_TextureUnit;         \n"
                         + "in vec2 v_TextureCoordinates;            \n"
@@ -115,7 +110,7 @@ public class BlendRenderer implements GLSurfaceView.Renderer {
 
 
         mPerVertexProgramHandle = ProgramUtil.createAndLinkProgram(getVertexShader(), getFragmentShader(),
-                new String[] {"a_Position",  "a_Color", "a_Normal"});
+                new String[]{"a_Position", "a_Color", "a_Normal"});
 
         mMVPMatrixHandle = GLES30.glGetUniformLocation(mPerVertexProgramHandle, "u_MVPMatrix");
         mPositionHandle = GLES30.glGetAttribLocation(mPerVertexProgramHandle, "a_Position");
@@ -127,8 +122,7 @@ public class BlendRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onSurfaceChanged(GL10 glUnused, int width, int height)
-    {
+    public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         // Set the OpenGL viewport to the same size as the surface.
         GLES30.glViewport(0, 0, width, height);
 
@@ -146,8 +140,7 @@ public class BlendRenderer implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onDrawFrame(GL10 glUnused)
-    {
+    public void onDrawFrame(GL10 glUnused) {
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
 
         GLES30.glEnable(GLES30.GL_BLEND);

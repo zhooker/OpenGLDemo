@@ -7,6 +7,6 @@ public class UniformBlockActivity extends BaseRendererActivity {
 
     @Override
     protected GLSurfaceView.Renderer getRenderer() {
-        return new UniformBlockRenderer();
+        return new UniformBlockRenderer(this);
     }
 }
