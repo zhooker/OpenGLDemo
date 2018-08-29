@@ -2,7 +2,7 @@ package com.example.opengldemo.texture;
 
 import android.opengl.GLSurfaceView;
 
-import com.example.opengldemo.util.BaseRendererActivity;
+import com.example.opengldemo.base.BaseRendererActivity;
 
 public class TextureActivity extends BaseRendererActivity {
 

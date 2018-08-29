@@ -1,4 +1,4 @@
-package com.example.opengldemo.util;
+package com.example.opengldemo.base;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.opengldemo.util.L;
 
 public abstract class BaseRendererActivity extends BaseActivity {
 

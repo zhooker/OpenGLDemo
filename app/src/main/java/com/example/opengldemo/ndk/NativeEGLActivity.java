@@ -2,7 +2,7 @@ package com.example.opengldemo.ndk;
 
 import android.opengl.GLSurfaceView;
 
-import com.example.opengldemo.util.BaseRendererActivity;
+import com.example.opengldemo.base.BaseRendererActivity;
 
 import javax.microedition.khronos.opengles.GL10;
 

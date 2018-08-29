@@ -6,16 +6,18 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.opengldemo.base.BaseActivity;
 import com.example.opengldemo.basic.BasicActivity;
 import com.example.opengldemo.blend.BlendActivity;
-import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.camera.CameraActivity;
 import com.example.opengldemo.camera2.Camera2Activity;
+import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
@@ -23,7 +25,6 @@ import com.example.opengldemo.save.SaveActivity;
 import com.example.opengldemo.test.stencil.StencilActivity;
 import com.example.opengldemo.texture.TextureActivity;
 import com.example.opengldemo.uniformblock.UniformBlockActivity;
-import com.example.opengldemo.util.BaseActivity;
 import com.example.opengldemo.util.L;
 import com.example.opengldemo.vao.VAOActivity;
 
@@ -96,16 +97,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void requestCameraPermission() {
-        L.d("相机权限未被授予，需要申请！");
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                REQUEST_CAMERA);
+        String[] requests = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        for (String request : requests) {
+            if (ContextCompat.checkSelfPermission(this, request) != PackageManager.PERMISSION_GRANTED) {
+                L.d(request + "权限未被授予，需要申请！");
+                ActivityCompat.requestPermissions(this, requests, REQUEST_CAMERA);
+            }
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA) {
-            for (int result: grantResults) {
+            for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     L.d("相机权限申请失败，退出程序！");
                     finish();

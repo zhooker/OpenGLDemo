@@ -1,7 +1,7 @@
 package com.example.opengldemo.uniformblock;
 
 import android.opengl.GLSurfaceView;
-import com.example.opengldemo.util.BaseRendererActivity;
+import com.example.opengldemo.base.BaseRendererActivity;
 
 public class UniformBlockActivity extends BaseRendererActivity {
 

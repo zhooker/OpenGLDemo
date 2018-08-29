@@ -2,8 +2,7 @@ package com.example.opengldemo.blend;
 
 import android.opengl.GLSurfaceView;
 
-import com.example.opengldemo.texture.TextureRenderer;
-import com.example.opengldemo.util.BaseRendererActivity;
+import com.example.opengldemo.base.BaseRendererActivity;
 
 public class BlendActivity extends BaseRendererActivity {
 

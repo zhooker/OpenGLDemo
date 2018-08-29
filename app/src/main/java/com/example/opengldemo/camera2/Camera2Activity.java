@@ -27,7 +27,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.opengldemo.R;
-import com.example.opengldemo.util.BaseActivity;
+import com.example.opengldemo.base.BaseActivity;
 import com.example.opengldemo.util.L;
 
 import java.nio.ByteBuffer;

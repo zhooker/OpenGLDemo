@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import com.example.opengldemo.R;
-import com.example.opengldemo.util.BaseActivity;
+import com.example.opengldemo.base.BaseActivity;
 import com.example.opengldemo.util.L;
 import java.io.IOException;
 

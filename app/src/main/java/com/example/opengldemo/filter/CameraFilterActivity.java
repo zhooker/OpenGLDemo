@@ -4,7 +4,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.opengldemo.util.BaseRendererActivity;
+import com.example.opengldemo.base.BaseRendererActivity;
 
 public class CameraFilterActivity extends BaseRendererActivity implements View.OnClickListener {
 

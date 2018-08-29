@@ -1,13 +1,12 @@
 package com.example.opengldemo.save;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import com.example.opengldemo.R;
-import com.example.opengldemo.util.BaseActivity;
+import com.example.opengldemo.base.BaseActivity;
 import com.example.opengldemo.util.L;
 
 public class SaveActivity extends BaseActivity implements View.OnClickListener {

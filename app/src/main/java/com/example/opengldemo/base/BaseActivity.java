@@ -1,4 +1,4 @@
-package com.example.opengldemo.util;
+package com.example.opengldemo.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.WindowManager;
+
+import com.example.opengldemo.util.L;
+
 import java.lang.reflect.Method;
 
 /**

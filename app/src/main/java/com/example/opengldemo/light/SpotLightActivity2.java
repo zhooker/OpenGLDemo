@@ -2,7 +2,7 @@ package com.example.opengldemo.light;
 
 import android.opengl.GLSurfaceView;
 
-import com.example.opengldemo.util.BaseRendererActivity;
+import com.example.opengldemo.base.BaseRendererActivity;
 
 public class SpotLightActivity2 extends BaseRendererActivity {
 
