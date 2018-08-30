@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:gravity="center_horizontal"
-        android:text="OpenGL ES 3.0 Demo" />
+        android:text="OpenGL ES 3.0 Demo"
+        android:visibility="gone"/>
 
     <ScrollView
         android:layout_width="match_parent"

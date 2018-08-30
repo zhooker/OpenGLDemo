@@ -9,7 +9,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -29,7 +31,7 @@ import com.example.opengldemo.uniformblock.UniformBlockActivity;
 import com.example.opengldemo.util.L;
 import com.example.opengldemo.vao.VAOActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     protected static final int REQUEST_CAMERA = 0;
 
@@ -40,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
             new Pair(SpotLightActivity2.class, "使用片段着色器渲染光照"),
             new Pair(TextureActivity.class, "使用纹理贴图"),
             new Pair(BlendActivity.class, "混合示例"),
+            new Pair(StencilActivity.class, "模版测试"),
             new Pair(VAOActivity.class, "使用 VAO、VBO、EBO的例子"),
             new Pair(UniformBlockActivity.class, "使用Uniform Block"),
-            new Pair(StencilActivity.class, "模版测试"),
             new Pair(SaveActivity.class, "利用Opengl保存图片,包括 FBO"),
             new Pair(CameraFilterActivity.class, "使用Camera实现简单的滤镜效果"),
             new Pair(CameraActivity.class, "使用camera实现预览"),
@@ -53,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("OpenGL ES 3.0 Demo");
+        initData();
+        requestCameraPermission();
+    }
+
+    private void initData() {
         LinearLayout container = (LinearLayout) findViewById(R.id.btn_container);
         for (int i = 0; i < ACTIVITIES.length; i++) {
             Button btn = createButton();
@@ -63,21 +71,19 @@ public class MainActivity extends AppCompatActivity {
                     BaseActivity.goToActivity(MainActivity.this, clazz);
                 }
             });
-            btn.setText((i + 1) + "、" + clazz.getSimpleName().replace("Activity", "") + " Demo\n" + ACTIVITIES[i].second);
+            btn.setText(String.format("%1$2d", i + 1) + "、" + clazz.getSimpleName().replace("Activity", "") + " Demo\n\t\t\t\t" + ACTIVITIES[i].second);
             container.addView(btn);
         }
-
-        requestCameraPermission();
     }
-
 
     private Button createButton() {
         Button btn = new Button(this);
         btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         btn.setAllCaps(false);
+        btn.setGravity(Gravity.LEFT);
         btn.setLineSpacing(1.2f, 1.2f);
-        btn.setPadding(5, 30, 5, 30);
+        btn.setPadding(20, 30, 20, 30);
         return btn;
     }
 
