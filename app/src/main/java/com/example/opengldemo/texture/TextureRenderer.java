@@ -21,10 +21,10 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class TextureRenderer extends LightRenderer {
 
-    private int textureId;
-    private int mTextureHandle;
-    private int mTextureCoordindate;
-    private final FloatBuffer mCubesTexture;
+    protected int textureId;
+    protected int mTextureHandle;
+    protected int mTextureCoordindate;
+    protected final FloatBuffer mCubesTexture;
 
     public TextureRenderer(Context context) {
         super(context);
@@ -47,11 +47,15 @@ public class TextureRenderer extends LightRenderer {
         return CubeUtil.cubeTextureData;
     }
 
+    protected int getTextureId() {
+        return R.drawable.wall;
+    }
+
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         super.onSurfaceCreated(glUnused, config);
         // init textureId
-        textureId = TextureHelper.loadTexture(mContext, R.drawable.wall);
+        textureId = TextureHelper.loadTexture(mContext, getTextureId());
     }
 
     @Override

@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -25,6 +23,7 @@ import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
 import com.example.opengldemo.save.SaveActivity;
+import com.example.opengldemo.solar.system.SolarActivity;
 import com.example.opengldemo.test.stencil.StencilActivity;
 import com.example.opengldemo.texture.TextureActivity;
 import com.example.opengldemo.uniformblock.UniformBlockActivity;
@@ -41,6 +40,7 @@ public class MainActivity extends BaseActivity {
             new Pair(SpotLightActivity.class, "使用顶点着色器渲染光照"),
             new Pair(SpotLightActivity2.class, "使用片段着色器渲染光照"),
             new Pair(TextureActivity.class, "使用纹理贴图"),
+            new Pair(SolarActivity.class, "太阳系模型"),
             new Pair(BlendActivity.class, "混合示例"),
             new Pair(StencilActivity.class, "模版测试"),
             new Pair(VAOActivity.class, "使用 VAO、VBO、EBO的例子"),
