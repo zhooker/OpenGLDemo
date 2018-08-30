@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -32,36 +33,20 @@ public class MainActivity extends AppCompatActivity {
 
     protected static final int REQUEST_CAMERA = 0;
 
-    private static final Class<? extends BaseActivity>[] ACTIVITIES = new Class[]{
-            BasicActivity.class,
-            NativeEGLActivity.class,
-            SpotLightActivity.class,
-            SpotLightActivity2.class,
-            TextureActivity.class,
-            BlendActivity.class,
-            VAOActivity.class,
-            UniformBlockActivity.class,
-            StencilActivity.class,
-            SaveActivity.class,
-            CameraFilterActivity.class,
-            CameraActivity.class,
-            Camera2Activity.class
-    };
-
-    private static final String[] ACTIVITIE_DESC = new String[]{
-            "Basic Demo\n  OpenGL基础",
-            "NDK Demo\n使用NDK的方式使用 OpenGL",
-            "Spot Light Demo\n使用顶点着色器渲染光照",
-            "Spot Light Demo 2\n使用片段着色器渲染光照",
-            "Texture Demo\n使用纹理贴图",
-            "Blend Demo\n混合示例",
-            "VAO Demo\n使用 VAO、VBO、EBO的例子",
-            "Uniform Block Demo\n使用Uniform Block",
-            "Stencil testing Demo\n模版测试",
-            "Save Image Demo\n利用Opengl保存图片,包括 FBO",
-            "Camera Filter Demo\n使用Camera实现简单的滤镜效果",
-            "Camera Demo\n使用camera实现预览",
-            "Camera2 Demo\n使用camera2实现预览"
+    private static final Pair<Class<? extends BaseActivity>, String>[] ACTIVITIES = new Pair[]{
+            new Pair(BasicActivity.class, "OpenGL基础"),
+            new Pair(NativeEGLActivity.class, "使用NDK的方式使用 OpenGL"),
+            new Pair(SpotLightActivity.class, "使用顶点着色器渲染光照"),
+            new Pair(SpotLightActivity2.class, "使用片段着色器渲染光照"),
+            new Pair(TextureActivity.class, "使用纹理贴图"),
+            new Pair(BlendActivity.class, "混合示例"),
+            new Pair(VAOActivity.class, "使用 VAO、VBO、EBO的例子"),
+            new Pair(UniformBlockActivity.class, "使用Uniform Block"),
+            new Pair(StencilActivity.class, "模版测试"),
+            new Pair(SaveActivity.class, "利用Opengl保存图片,包括 FBO"),
+            new Pair(CameraFilterActivity.class, "使用Camera实现简单的滤镜效果"),
+            new Pair(CameraActivity.class, "使用camera实现预览"),
+            new Pair(Camera2Activity.class, "使用camera2实现预览"),
     };
 
     @Override
@@ -71,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout container = (LinearLayout) findViewById(R.id.btn_container);
         for (int i = 0; i < ACTIVITIES.length; i++) {
             Button btn = createButton();
-            final Class<? extends Activity> clazz = ACTIVITIES[i];
+            final Class<? extends Activity> clazz = ACTIVITIES[i].first;
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     BaseActivity.goToActivity(MainActivity.this, clazz);
                 }
             });
-            btn.setText((i + 1) + "、" + ACTIVITIE_DESC[i]);
+            btn.setText((i + 1) + "、" + clazz.getSimpleName().replace("Activity", "") + " Demo\n" + ACTIVITIES[i].second);
             container.addView(btn);
         }
 
