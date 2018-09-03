@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
             btn.setText((i + 1) + "、" + ACTIVITIE_DESC[i]);
             container.addView(btn);
         }
+
+        System.out.print("test");
     }
 
     private Button createButton() {
