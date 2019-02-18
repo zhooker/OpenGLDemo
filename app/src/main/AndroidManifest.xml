@@ -34,6 +34,7 @@
         <activity android:name=".filter.CameraFilterActivity" />
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".camera2.Camera2Activity" />
+        <activity android:name=".player.PlayerActivity" />
     </application>
 
 </manifest>

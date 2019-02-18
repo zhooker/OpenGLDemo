@@ -22,6 +22,7 @@ import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
+import com.example.opengldemo.player.PlayerActivity;
 import com.example.opengldemo.save.SaveActivity;
 import com.example.opengldemo.solar.system.SolarActivity;
 import com.example.opengldemo.test.stencil.StencilActivity;
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity {
             new Pair(CameraFilterActivity.class, "使用Camera实现简单的滤镜效果"),
             new Pair(CameraActivity.class, "使用camera实现预览"),
             new Pair(Camera2Activity.class, "使用camera2实现预览"),
+            new Pair(PlayerActivity.class, "IJKPlayer测试"),
     };
 
     @Override
@@ -58,6 +60,10 @@ public class MainActivity extends BaseActivity {
         setTitle("OpenGL ES 3.0 Demo");
         initData();
         requestCameraPermission();
+    }
+
+    public void onTest(View v) {
+
     }
 
     private void initData() {
