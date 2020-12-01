@@ -35,6 +35,12 @@
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".camera2.Camera2Activity" />
         <activity android:name=".player.PlayerActivity" />
+        <activity android:name=".demo.SimpleActivity" />
+        <activity android:name=".demo.ProjectionActivity" />
+        <activity android:name=".demo.SimpleSquareActivity" />
+        <activity android:name=".demo.CubeActivity" />
+        <activity android:name=".demo.TextureActivity" />
+        <activity android:name=".demo.CameraPreviewActivity" />
     </application>
 
 </manifest>

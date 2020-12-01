@@ -18,6 +18,11 @@ import com.example.opengldemo.basic.BasicActivity;
 import com.example.opengldemo.blend.BlendActivity;
 import com.example.opengldemo.camera.CameraActivity;
 import com.example.opengldemo.camera2.Camera2Activity;
+import com.example.opengldemo.demo.CameraPreviewActivity;
+import com.example.opengldemo.demo.CubeActivity;
+import com.example.opengldemo.demo.SimpleSquareActivity;
+import com.example.opengldemo.demo.ProjectionActivity;
+import com.example.opengldemo.demo.SimpleActivity;
 import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
@@ -36,6 +41,12 @@ public class MainActivity extends BaseActivity {
     protected static final int REQUEST_CAMERA = 0;
 
     private static final Pair<Class<? extends BaseActivity>, String>[] ACTIVITIES = new Pair[]{
+            new Pair(SimpleActivity.class, "SimpleActivity"),
+            new Pair(SimpleSquareActivity.class, "SimpleSquareActivity"),
+            new Pair(ProjectionActivity.class, "ProjectionActivity"),
+            new Pair(CubeActivity.class, "CubeActivity"),
+            new Pair(com.example.opengldemo.demo.TextureActivity.class, "TextureActivity"),
+            new Pair(CameraPreviewActivity.class, "CameraPreviewActivity"),
             new Pair(BasicActivity.class, "OpenGL基础"),
             new Pair(NativeEGLActivity.class, "使用NDK的方式使用 OpenGL"),
             new Pair(SpotLightActivity.class, "使用顶点着色器渲染光照"),
