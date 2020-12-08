@@ -41,6 +41,7 @@
         <activity android:name=".demo.CubeActivity" />
         <activity android:name=".demo.TextureActivity" />
         <activity android:name=".demo.CameraPreviewActivity" />
+        <activity android:name=".demo.camera.CameraActivity" />
     </application>
 
 </manifest>
