@@ -18,6 +18,7 @@ import com.example.opengldemo.basic.BasicActivity;
 import com.example.opengldemo.blend.BlendActivity;
 import com.example.opengldemo.camera.CameraActivity;
 import com.example.opengldemo.camera2.Camera2Activity;
+import com.example.opengldemo.decoder.MediaDecoderActivity;
 import com.example.opengldemo.demo.CameraPreviewActivity;
 import com.example.opengldemo.demo.CubeActivity;
 import com.example.opengldemo.demo.SimpleSquareActivity;
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity {
             new Pair(com.example.opengldemo.demo.TextureActivity.class, "TextureActivity"),
             new Pair(CameraPreviewActivity.class, "摄像头预览使用GLSurfaceView + SurfaceTexture"),
             new Pair(com.example.opengldemo.demo.camera.CameraActivity.class, "摄像头预览使用GLSurfaceView渲染YUV数据纹理"),
+            new Pair(MediaDecoderActivity.class, "解码mp4成BGR或NV21并通过openGL渲染"),
             new Pair(BasicActivity.class, "OpenGL基础"),
             new Pair(NativeEGLActivity.class, "使用NDK的方式使用 OpenGL"),
             new Pair(SpotLightActivity.class, "使用顶点着色器渲染光照"),

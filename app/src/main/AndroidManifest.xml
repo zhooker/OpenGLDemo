@@ -42,6 +42,7 @@
         <activity android:name=".demo.TextureActivity" />
         <activity android:name=".demo.CameraPreviewActivity" />
         <activity android:name=".demo.camera.CameraActivity" />
+        <activity android:name=".decoder.MediaDecoderActivity" />
     </application>
 
 </manifest>
