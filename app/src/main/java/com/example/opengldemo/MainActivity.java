@@ -21,14 +21,15 @@ import com.example.opengldemo.camera2.Camera2Activity;
 import com.example.opengldemo.decoder.MediaDecoderActivity;
 import com.example.opengldemo.demo.CameraPreviewActivity;
 import com.example.opengldemo.demo.CubeActivity;
-import com.example.opengldemo.demo.SimpleSquareActivity;
 import com.example.opengldemo.demo.ProjectionActivity;
 import com.example.opengldemo.demo.SimpleActivity;
+import com.example.opengldemo.demo.SimpleSquareActivity;
 import com.example.opengldemo.filter.CameraFilterActivity;
 import com.example.opengldemo.light.SpotLightActivity;
 import com.example.opengldemo.light.SpotLightActivity2;
 import com.example.opengldemo.ndk.NativeEGLActivity;
 import com.example.opengldemo.player.PlayerActivity;
+import com.example.opengldemo.recorder.RecorderActivity;
 import com.example.opengldemo.save.SaveActivity;
 import com.example.opengldemo.solar.system.SolarActivity;
 import com.example.opengldemo.test.stencil.StencilActivity;
@@ -42,11 +43,12 @@ public class MainActivity extends BaseActivity {
     protected static final int REQUEST_CAMERA = 0;
 
     private static final Pair<Class<? extends BaseActivity>, String>[] ACTIVITIES = new Pair[]{
+            new Pair(RecorderActivity.class, "渲染YUV纹理并录制视频"),
             new Pair(SimpleActivity.class, "SimpleActivity"),
             new Pair(SimpleSquareActivity.class, "SimpleSquareActivity"),
             new Pair(ProjectionActivity.class, "ProjectionActivity"),
             new Pair(CubeActivity.class, "CubeActivity"),
-            new Pair(com.example.opengldemo.demo.TextureActivity.class, "TextureActivity"),
+            new Pair(com.example.opengldemo.demo.TextureActivity.class, "PPT Demo 演示"),
             new Pair(CameraPreviewActivity.class, "摄像头预览使用GLSurfaceView + SurfaceTexture"),
             new Pair(com.example.opengldemo.demo.camera.CameraActivity.class, "摄像头预览使用GLSurfaceView渲染YUV数据纹理"),
             new Pair(MediaDecoderActivity.class, "解码mp4成BGR或NV21并通过openGL渲染"),

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.opengldemo.recorder.RecorderActivity">
+
+    <LinearLayout
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:context="com.example.opengldemo.MainActivity">
+
+        <SurfaceView
+            android:id="@+id/surfaceview"
+            android:layout_width="360px"
+            android:layout_height="640px" />
+
+        <!--    <com.example.opengldemo.demo.camera.gl.RgbTextureView
+                android:id="@+id/rgaTextureView"
+                android:layout_width="360px"
+                android:layout_height="640px"/>-->
+
+        <!--        <android.opengl.GLSurfaceView-->
+        <!--            android:id="@+id/glsurfaceview"-->
+        <!--            android:layout_width="360px"-->
+        <!--            android:layout_height="640px" />-->
+
+        <TextureView
+            android:id="@+id/texture"
+            android:layout_width="360px"
+            android:layout_height="640px" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onStartRecord"
+        android:text="开始录制" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onStopRecord"
+        android:text="停止录制" />
+
+</LinearLayout>

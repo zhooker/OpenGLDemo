@@ -1,15 +1,16 @@
-package com.example.opengldemo.demo.camera;
+package com.example.opengldemo.recorder;
 
 import android.graphics.PixelFormat;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.TextureView;
+import android.view.View;
 
 import com.example.opengldemo.R;
 import com.example.opengldemo.base.BaseActivity;
-import com.example.opengldemo.demo.camera.gl.RgbTextureView;
 import com.example.opengldemo.util.L;
 
 import java.io.IOException;
@@ -17,57 +18,61 @@ import java.io.IOException;
 /**
  * 通过实时预览 与 实时渲染 两个画面，来做预览对比
  */
-public class CameraActivity extends BaseActivity implements Camera.PreviewCallback {
+public class RecorderActivity extends BaseActivity implements Camera.PreviewCallback {
 
-    protected GLSurfaceView mGLSurfaceView;
-    protected CameraNv21Renderer cameraNv21Renderer;
+
     protected SurfaceView mSurfaceView;
-    protected RgbTextureView rgbTextureView;
+    protected TextureView textureView;
+    protected CameraRenderer cameraRenderer = new CameraRenderer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo_camera);
+        setContentView(R.layout.activity_recorder);
 
-        // CameraNv21Renderer : 利用 GLSurfaceView 显示渲染的y、uv纹理
-        // CPU 12%  MEM 25M
-        mGLSurfaceView = findViewById(R.id.glsurfaceview);
-        mGLSurfaceView.setEGLContextClientVersion(2);
-        cameraNv21Renderer = new CameraNv21Renderer(mGLSurfaceView);
-        mGLSurfaceView.setRenderer(cameraNv21Renderer);
+        textureView = findViewById(R.id.texture);
+        textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                cameraRenderer.start(surface, width, height);
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+            }
+        });
 
         mSurfaceView = findViewById(R.id.surfaceview);
         SurfaceHolder mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
         mSurfaceHolder.addCallback(mSurfaceCallback);
-
-        // RgbTextureView : 利用 renderscript 来渲染yuv，CPU占用会变高
-        // CPU 16%  MEM 36M
-//        rgbTextureView = findViewById(R.id.rgaTextureView);
-//        rgbTextureView.setPreviewSize(1280, 720);
-//
-//        Matrix rgbMatrix = new Matrix();
-//        rgbMatrix.postRotate(90);
-//        rgbMatrix.postTranslate(720, 0);
-//        rgbMatrix.postScale(0.5f, 0.5f);
-//        rgbTextureView.setMatrix(rgbMatrix);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mGLSurfaceView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mGLSurfaceView.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cameraRenderer.stop();
     }
 
     /**
@@ -85,7 +90,7 @@ public class CameraActivity extends BaseActivity implements Camera.PreviewCallba
 
             camera.autoFocus(null);
             camera.setPreviewDisplay(mSurfaceView.getHolder());
-            camera.setPreviewCallback(CameraActivity.this);
+            camera.setPreviewCallback(RecorderActivity.this);
             return camera;
         } catch (IOException e) {
             L.d(e.toString());
@@ -136,7 +141,16 @@ public class CameraActivity extends BaseActivity implements Camera.PreviewCallba
     public void onPreviewFrame(byte[] data, Camera camera) {
         Camera.Size size = camera.getParameters().getPreviewSize();
         L.d("preview size = " + size.width + "x" + size.height + ", format = " + camera.getParameters().getPreviewFormat());
-        cameraNv21Renderer.putData(data, 1280, 720);
+//        cameraNv21Renderer.putData(data, 1280, 720);
 //        rgbTextureView.onFrame(data, 1280, 720);
+        cameraRenderer.onRenderVideoFrame(data);
+    }
+
+    public void onStartRecord(View view) {
+        cameraRenderer.startRecord("/sdcard/record_test.mp4");
+    }
+
+    public void onStopRecord(View view) {
+        cameraRenderer.stopRecord();
     }
 }

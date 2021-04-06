@@ -43,6 +43,7 @@
         <activity android:name=".demo.CameraPreviewActivity" />
         <activity android:name=".demo.camera.CameraActivity" />
         <activity android:name=".decoder.MediaDecoderActivity" />
+        <activity android:name=".recorder.RecorderActivity" />
     </application>
 
 </manifest>
