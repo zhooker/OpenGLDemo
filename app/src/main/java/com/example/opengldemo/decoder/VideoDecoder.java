@@ -1,5 +1,7 @@
 package com.example.opengldemo.decoder;
 
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
 import android.media.Image;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
@@ -58,6 +60,9 @@ public class VideoDecoder {
         }
     }
 
+    long lastSystemTime = -1;
+    long lastMediaTime = -1;
+
     public void start() {
 
         if (mMediaExtractor == null || mCodec == null) {
@@ -94,7 +99,7 @@ public class VideoDecoder {
             }
 
             if (!isEOS) {
-                int inIndex = mCodec.dequeueInputBuffer(0);
+                int inIndex = mCodec.dequeueInputBuffer(-1);
                 if (inIndex >= 0) {
                     ByteBuffer buffer = inputBuffers[inIndex];
                     //把指定通道中的数据按偏移量读取到ByteBuffer中；读取的是一帧数据
@@ -108,14 +113,28 @@ public class VideoDecoder {
                         isEOS = true;
                     } else {
                         sampleTime = time;
-                        mCodec.queueInputBuffer(inIndex, 0, sampleSize, sampleTime, 0);
+
+                        // 与系统时间同步
+                        if (lastMediaTime > 0 && lastSystemTime > 0) {
+                            try {
+                                Thread.sleep((time - lastMediaTime) / 1000 - (System.currentTimeMillis() - lastSystemTime));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        lastMediaTime = time;
+                        lastSystemTime = System.currentTimeMillis();
+
+
+                        mCodec.queueInputBuffer(inIndex, 0, sampleSize, sampleTime, mMediaExtractor.getSampleFlags());
                         //读取一帧后必须调用，提取下一帧
                         mMediaExtractor.advance();
                     }
                 }
             }
 
-            int outIndex = mCodec.dequeueOutputBuffer(info, 0);
+            int outIndex = mCodec.dequeueOutputBuffer(info, -1);
             switch (outIndex) {
                 case MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED:
 //                        LogUtils.e(">> output buffer changed ");
@@ -130,6 +149,9 @@ public class VideoDecoder {
                     Image image = mCodec.getOutputImage(outIndex);
                     byte[] rgb = convertBGRFromImage(image, screenSize.getWidth(), screenSize.getHeight());
                     image.close();
+//                    ByteBuffer buffer = mCodec.getOutputBuffer(outIndex);
+//                    byte[] rgb = new byte[(int) (1280*720*1.5f)];
+//                    buffer.get(rgb);
                     mCodec.releaseOutputBuffer(outIndex, true);
 
                     if (mLdDecoderListener != null) {
@@ -186,6 +208,61 @@ public class VideoDecoder {
         }
     }
 
+    protected byte[] convertNV21FromImage(Image image) {
+        Rect crop = image.getCropRect();
+        int format = image.getFormat();
+        int width = crop.width();
+        int height = crop.height();
+        Image.Plane[] planes = image.getPlanes();
+        byte[] data = new byte[width * height * ImageFormat.getBitsPerPixel(format) / 8];
+        byte[] rowData = new byte[planes[0].getRowStride()];
+
+        int channelOffset = 0;
+        int outputStride = 1;
+        for (int i = 0; i < planes.length; i++) {
+            switch (i) {
+                case 0:
+                    channelOffset = 0;
+                    outputStride = 1;
+                    break;
+                case 1:
+                    channelOffset = width * height + 1;
+                    outputStride = 2;
+                    break;
+                case 2:
+                    channelOffset = width * height;
+                    outputStride = 2;
+                    break;
+            }
+            ByteBuffer buffer = planes[i].getBuffer();
+            int rowStride = planes[i].getRowStride();
+            int pixelStride = planes[i].getPixelStride();
+            int shift = (i == 0) ? 0 : 1;
+            int w = width >> shift;
+            int h = height >> shift;
+            buffer.position(rowStride * (crop.top >> shift) + pixelStride * (crop.left >> shift));
+            for (int row = 0; row < h; row++) {
+                int length;
+                if (pixelStride == 1 && outputStride == 1) {
+                    length = w;
+                    buffer.get(data, channelOffset, length);
+                    channelOffset += length;
+                } else {
+                    length = (w - 1) * pixelStride + 1;
+                    buffer.get(rowData, 0, length);
+                    for (int col = 0; col < w; col++) {
+                        data[channelOffset] = rowData[col * pixelStride];
+                        channelOffset += outputStride;
+                    }
+                }
+                if (row < h - 1) {
+                    buffer.position(buffer.position() + rowStride - length);
+                }
+            }
+        }
+        return data;
+    }
+
     protected byte[] convertBGRFromImage(Image image, int width, int height) {
 
         byte[] input;
@@ -201,7 +278,7 @@ public class VideoDecoder {
         vBuffer.get(input, ySize, vSize);
         uBuffer.get(input, ySize + vSize, uSize);
 
-        return NativeYUV.convertYuv2Rgb(input,width,height);
+        return NativeYUV.convertYuv2Rgb(input, width, height);
 //        byte[] output = new byte[screenSize.getWidth() * screenSize.getHeight() * 3];
 //        int nvOff = width * height;
 //        int i, j, yIndex = 0;
